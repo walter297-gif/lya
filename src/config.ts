@@ -1,0 +1,32 @@
+import { config } from "dotenv";
+
+config();
+
+export const ENV = {
+  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || "",
+  TELEGRAM_ALLOWED_USER_IDS: process.env.TELEGRAM_ALLOWED_USER_IDS || "",
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY || "",
+  DB_PATH: process.env.DB_PATH || "./memory.db",
+  FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID || "",
+  FIREBASE_CREDENTIALS_PATH: process.env.GOOGLE_APPLICATION_CREDENTIALS || "",
+};
+
+export function validateConfig() {
+  if (!ENV.TELEGRAM_BOT_TOKEN) throw new Error("Missing TELEGRAM_BOT_TOKEN");
+  if (!ENV.TELEGRAM_ALLOWED_USER_IDS) throw new Error("Missing TELEGRAM_ALLOWED_USER_IDS");
+  if (!ENV.GEMINI_API_KEY) {
+    throw new Error("Missing GEMINI_API_KEY");
+  }
+
+  // Validate allowed user ids format
+  const ids = ENV.TELEGRAM_ALLOWED_USER_IDS.split(",").map(id => id.trim());
+  if (ids.some(id => isNaN(Number(id)))) {
+    throw new Error("TELEGRAM_ALLOWED_USER_IDS must be a comma-separated list of numbers");
+  }
+}
+
+export function isUserAllowed(userId: number | undefined): boolean {
+  if (!userId) return false;
+  const ids = ENV.TELEGRAM_ALLOWED_USER_IDS.split(",").map(id => Number(id.trim()));
+  return ids.includes(userId);
+}
