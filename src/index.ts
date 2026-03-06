@@ -1,4 +1,5 @@
 import { Bot } from "grammy";
+import http from "http";
 import { ENV, validateConfig, isUserAllowed } from "./config.js";
 import { processUserMessage } from "./agent/loop.js";
 
@@ -54,10 +55,26 @@ bot.catch((err) => {
     console.error(err.error);
 });
 
+// Minimal HTTP server for Render health checks
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('LyaGravity Bot is running\n');
+});
+
+const PORT = process.env.PORT || 8080;
+server.listen(PORT, () => {
+    console.log(`Health check server listening on port ${PORT}`);
+});
+
 // Start the bot
 console.log("Starting LyaGravity bot...");
-bot.start({
-    onStart: (botInfo) => {
-        console.log(`Bot initialized successfully as @${botInfo.username}`);
-    }
-});
+try {
+    await bot.start({
+        onStart: (botInfo) => {
+            console.log(`Bot initialized successfully as @${botInfo.username}`);
+        }
+    });
+} catch (error) {
+    console.error("Failed to start bot:", error);
+    process.exit(1);
+}
