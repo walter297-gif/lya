@@ -21,7 +21,7 @@ export async function generateResponse(
     if (ENV.GEMINI_API_KEY) {
         try {
             const response = await gemini.chat.completions.create({
-                model: 'gemini-2.0-flash',
+                model: 'gemini-1.5-flash',
                 messages: messages as any,
                 tools: tools?.length ? (tools as any) : undefined,
                 temperature: 0.7,

@@ -32,7 +32,7 @@ export async function saveMessage(msg: {
     await db.collection(COLLECTION_NAME).add(docData);
 }
 
-export async function getHistory(limitCount = 100) {
+export async function getHistory(limitCount = 20) {
     const snapshot = await db.collection(COLLECTION_NAME)
         .orderBy('timestamp', 'asc')
         .limitToLast(limitCount)
