@@ -24,7 +24,7 @@ export async function generateResponse(
     const url = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
     
     const body = {
-        model: 'gemini-1.5-flash',
+        model: 'gemini-2.0-flash',
         messages: messages,
         tools: tools?.length ? tools : undefined,
         temperature: 0.7,
