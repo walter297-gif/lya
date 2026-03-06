@@ -9,9 +9,14 @@ let serviceAccount: ServiceAccount;
 if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
     serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
 } else {
-    serviceAccount = JSON.parse(
-        readFileSync(path.resolve(process.cwd(), ENV.FIREBASE_CREDENTIALS_PATH), 'utf8')
-    );
+    try {
+        const credPath = path.resolve(process.cwd(), ENV.FIREBASE_CREDENTIALS_PATH);
+        serviceAccount = JSON.parse(readFileSync(credPath, 'utf8'));
+    } catch (error) {
+        console.error(`[Firebase Error] Could not read service account file at ${ENV.FIREBASE_CREDENTIALS_PATH}.`);
+        console.error("Please ensure the file exists OR set the FIREBASE_SERVICE_ACCOUNT_JSON environment variable.");
+        throw error;
+    }
 }
 
 const app = initializeApp({
