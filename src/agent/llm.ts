@@ -1,8 +1,9 @@
 import OpenAI from 'openai';
 import { ENV } from '../config.js';
 
+console.log(`[LLM] Initializing with API Key: ${ENV.GEMINI_API_KEY ? 'YES' : 'NO'}`);
 const gemini = new OpenAI({
-    baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
+    baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai',
     apiKey: ENV.GEMINI_API_KEY,
 });
 
