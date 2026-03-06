@@ -24,7 +24,7 @@ export async function generateResponse(
     const url = 'https://openrouter.ai/api/v1/chat/completions';
     
     const body = {
-        model: 'mistralai/mistral-7b-instruct:free', // Extremely stable legacy free endpoint
+        model: 'openrouter/auto', // Let OpenRouter pick the best available model
         messages: messages,
         tools: tools?.length ? tools : undefined,
         temperature: 0.7,
