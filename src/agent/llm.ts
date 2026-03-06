@@ -24,7 +24,7 @@ export async function generateResponse(
     const url = 'https://openrouter.ai/api/v1/chat/completions';
     
     const body = {
-        model: 'google/gemini-2.0-flash-exp:free', // Using reliable free model
+        model: 'meta-llama/llama-3.1-8b-instruct:free', // Using reliable free model
         messages: messages,
         tools: tools?.length ? tools : undefined,
         temperature: 0.7,
