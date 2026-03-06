@@ -1,9 +1,9 @@
 import OpenAI from 'openai';
 import { ENV } from '../config.js';
 
-console.log(`[LLM] Initializing with API Key: ${ENV.GEMINI_API_KEY ? 'YES' : 'NO'}`);
+console.log(`[LLM] API Key status: ${ENV.GEMINI_API_KEY ? 'CONECTADA (OK)' : 'FALTANTE (ERROR)'}`);
 const gemini = new OpenAI({
-    baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai',
+    baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
     apiKey: ENV.GEMINI_API_KEY,
 });
 
@@ -19,18 +19,20 @@ export async function generateResponse(
     messages: LLMMessage[],
     tools?: any[]
 ) {
+    console.log(`[LLM] Calling Gemini with Key: ${ENV.GEMINI_API_KEY ? 'Present' : 'MISSING'}`);
     if (ENV.GEMINI_API_KEY) {
         try {
+            const model = 'gemini-1.5-flash';
+            console.log(`[LLM] Using model: ${model}`);
             const response = await gemini.chat.completions.create({
-                model: 'gemini-1.5-flash',
+                model: model,
                 messages: messages as any,
                 tools: tools?.length ? (tools as any) : undefined,
                 temperature: 0.7,
             });
-            // Google's endpoint returns valid OpenAI-like responses
             return response.choices[0].message;
         } catch (error) {
-            console.error('[Gemini Error]', error instanceof Error ? error.message : error);
+            console.error('[Gemini Error]', error);
             throw error;
         }
     } else {
