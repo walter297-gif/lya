@@ -5,7 +5,7 @@ config();
 export const ENV = {
   TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || "",
   TELEGRAM_ALLOWED_USER_IDS: process.env.TELEGRAM_ALLOWED_USER_IDS || "",
-  GEMINI_API_KEY: process.env.GEMINI_API_KEY || "",
+  OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY || "",
   DB_PATH: process.env.DB_PATH || "./memory.db",
   FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID || "",
   FIREBASE_CREDENTIALS_PATH: process.env.GOOGLE_APPLICATION_CREDENTIALS || "",
@@ -14,8 +14,8 @@ export const ENV = {
 export function validateConfig() {
   if (!ENV.TELEGRAM_BOT_TOKEN) throw new Error("Missing TELEGRAM_BOT_TOKEN");
   if (!ENV.TELEGRAM_ALLOWED_USER_IDS) throw new Error("Missing TELEGRAM_ALLOWED_USER_IDS");
-  if (!ENV.GEMINI_API_KEY) {
-    throw new Error("Missing GEMINI_API_KEY");
+  if (!ENV.OPENROUTER_API_KEY) {
+    throw new Error("Missing OPENROUTER_API_KEY");
   }
 
   // Validate allowed user ids format

@@ -12,19 +12,19 @@ export async function generateResponse(
     messages: LLMMessage[],
     tools?: any[]
 ) {
-    const apiKey = ENV.GEMINI_API_KEY;
+    const apiKey = ENV.OPENROUTER_API_KEY;
     if (!apiKey) {
-        throw new Error('No API key configured for Gemini');
+        throw new Error('No API key configured for OpenRouter');
     }
 
     // Log key presence and basic info
     console.log(`[LLM] Attempting request. Key starts with: ${apiKey.substring(0, 4)}...`);
     
-    // Google OpenAI compatibility endpoint
-    const url = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
+    // OpenRouter endpoint
+    const url = 'https://openrouter.ai/api/v1/chat/completions';
     
     const body = {
-        model: 'gemini-2.0-flash',
+        model: 'google/gemini-2.0-flash-lite-preview-02-05:free', // Free model via OpenRouter
         messages: messages,
         tools: tools?.length ? tools : undefined,
         temperature: 0.7,
@@ -35,7 +35,9 @@ export async function generateResponse(
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                'Authorization': `Bearer ${apiKey}`,
+                'HTTP-Referer': 'https://github.com/walter297-gif/lya', // Required by OpenRouter
+                'X-Title': 'LyaGravity Bot'
             },
             body: JSON.stringify(body)
         });
@@ -43,7 +45,7 @@ export async function generateResponse(
         if (!response.ok) {
             const errorText = await response.text();
             console.error(`[LLM Error] HTTP ${response.status}: ${errorText}`);
-            throw new Error(`Gemini API Error (HTTP ${response.status}): ${errorText}`);
+            throw new Error(`OpenRouter API Error (HTTP ${response.status}): ${errorText}`);
         }
 
         const data = await response.json();
